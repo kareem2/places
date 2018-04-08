@@ -1,0 +1,19 @@
+{
+    "name": "phpgeolib/places",
+    "description": "Places API handlers for Google & Zomato",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "karim",
+            "email": "k.harazeen@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Places\\": "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    }
+}
