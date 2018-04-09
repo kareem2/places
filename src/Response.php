@@ -1,4 +1,5 @@
 <?php
+namespace Places;
 
 interface Response
 {

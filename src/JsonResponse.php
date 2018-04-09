@@ -1,5 +1,5 @@
 <?php
-
+namespace Places;
 
 class JsonResponse implements Response
 {
