@@ -4,13 +4,13 @@ namespace Places;
 use GuzzleHttp\Client;
 
 /**
- * Class ApiRequest
+ * Class ApiEndpoint
  *
  * Main request class that will be used by the API handlers.
  *
  * @package Places
  */
-class ApiRequest
+class ApiEndpoint
 {
 
     /**
@@ -67,6 +67,8 @@ class ApiRequest
 	{
         $this->api_key = $parames['api_key'];
 
+        $this->client_options = [];
+
 		if(isset($parames['http_client'])){
 			$this->httpClient = $parames['http_client'];
 		}else{
@@ -82,6 +84,10 @@ class ApiRequest
             $this->client_options = $parames['client_options'];
         }
 
+        if(!empty($params['api_base_url'])){
+            $this->api_base_url = $params['api_base_url'];
+        }        
+
 	}
 
 
@@ -95,15 +101,12 @@ class ApiRequest
         if(isset($options['query'])){
             $this->buildApiQuery($options['query']);
         }
-
     }
 
     public function buildApiQuery($query = []){
         if(!empty($query)){
             $this->api_parameters = $query;
         }
-
-        $this->api_parameters['key'] = $this->api_key;
     }
 
     public function get($options = []){
@@ -112,8 +115,15 @@ class ApiRequest
 
         $this->buildOptions($options);
 
+        $options['query'] = $this->api_parameters;
 
-        $response = $this->httpClient->get($url, ['query' => $this->api_parameters]);
+
+        foreach ($this->client_options as $key => $value) {
+            $options[$key] = $value;
+        }
+        //var_dump($options);
+        //die();
+        $response = $this->httpClient->get($url, $options);
 
         $this->response = json_decode($response->getBody(), true);
 

@@ -1,16 +1,16 @@
 <?php
 namespace Places\Google;
 
-use Places\ApiRequest;
+use Places\ApiEndpoint;
 
 /**
- * Class GoogleApiRequest
+ * Class GoogleApiEndpoint
  *
  * Main request class that will be used to make Google API requests.
  *
  * @package Places\Google
  */
-class GoogleApiRequest extends ApiRequest
+class GoogleApiEndpoint extends ApiEndpoint
 {
 
     /**
@@ -21,14 +21,9 @@ class GoogleApiRequest extends ApiRequest
 	protected $api_base_url = 'https://maps.googleapis.com/maps/api/place';
 
 
-    public function __construct($params = [])
-    {
-        if(!empty($params['api_base_url'])){
-            $this->api_base_url = $params['api_base_url'];
-        }
-
-        parent::__construct($params);
-
+    public function buildApiQuery($query = []){
+        parent::buildApiQuery($query);
+        $this->api_parameters['key'] = $this->api_key;
     }
 
 
@@ -36,7 +31,7 @@ class GoogleApiRequest extends ApiRequest
 
         if(isset($this->response['next_page_token'])){
             $this->api_parameters['pagetoken'] = $this->response['next_page_token'];
-            sleep(1);
+            sleep(2);
             return $this->get();
         }
         
