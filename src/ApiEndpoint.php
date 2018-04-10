@@ -14,13 +14,6 @@ class ApiEndpoint
 {
 
     /**
-     * Handler api key
-     *
-     * @var string
-     */
-	protected $api_key;
-
-    /**
      * Base api url
      *
      * @var string
@@ -65,7 +58,11 @@ class ApiEndpoint
 	
 	function __construct($parames = [])
 	{
-        $this->api_key = $parames['api_key'];
+        //$this->api_key = $parames['api_key'];
+        if(isset($parames['api_key'])){
+            static::$api_key = $parames['api_key'];
+        }
+        
 
         $this->client_options = [];
 
@@ -121,8 +118,7 @@ class ApiEndpoint
         foreach ($this->client_options as $key => $value) {
             $options[$key] = $value;
         }
-        //var_dump($options);
-        //die();
+
         $response = $this->httpClient->get($url, $options);
 
         $this->response = json_decode($response->getBody(), true);
@@ -136,7 +132,7 @@ class ApiEndpoint
     }
 
     public function nextPage(){
-
+        return ;
     }
 	
 }

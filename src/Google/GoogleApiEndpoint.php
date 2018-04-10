@@ -13,6 +13,14 @@ use Places\ApiEndpoint;
 class GoogleApiEndpoint extends ApiEndpoint
 {
 
+
+    /**
+     * Handler api key
+     *
+     * @var string
+     */
+    public static $api_key;    
+
     /**
      * Base api url
      *
@@ -21,9 +29,19 @@ class GoogleApiEndpoint extends ApiEndpoint
 	protected $api_base_url = 'https://maps.googleapis.com/maps/api/place';
 
 
+    function __construct($parames = [])
+    {
+        if(isset($parames['api_key'])){
+            static::$api_key = $parames['api_key'];
+        }
+
+        parent::__construct();
+    }
+
+
     public function buildApiQuery($query = []){
         parent::buildApiQuery($query);
-        $this->api_parameters['key'] = $this->api_key;
+        $this->api_parameters['key'] = static::$api_key;
     }
 
 
@@ -37,6 +55,6 @@ class GoogleApiEndpoint extends ApiEndpoint
         
         return false;
         
-    }
+    }  
 
 }

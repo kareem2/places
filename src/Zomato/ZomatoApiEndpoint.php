@@ -14,12 +14,27 @@ class ZomatoApiEndpoint extends ApiEndpoint
 {
 
     /**
+     * Handler api key
+     *
+     * @var string
+     */
+    public static $api_key; 
+
+    /**
      * Base api url
      *
      * @var string
      */
 	protected $api_base_url = 'https://developers.zomato.com/api/v2.1';
 
+    function __construct($parames = [])
+    {
+        if(isset($parames['api_key'])){
+            static::$api_key = $parames['api_key'];
+        }
+
+        parent::__construct();
+    }
 
     public function buildOptions($options = []){
         if(isset($options['query'])){
@@ -29,7 +44,7 @@ class ZomatoApiEndpoint extends ApiEndpoint
 
         $this->client_options['headers'] = [
             'accept' => 'application/json',
-            'user-key' => $this->api_key
+            'user-key' => static::$api_key
         ];
 
         //var_dump($this->client_options);
@@ -47,5 +62,5 @@ class ZomatoApiEndpoint extends ApiEndpoint
         return false;
         
     }
-
+    
 }
