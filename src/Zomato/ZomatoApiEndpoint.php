@@ -50,17 +50,5 @@ class ZomatoApiEndpoint extends ApiEndpoint
         //var_dump($this->client_options);
     }
 
-
-    public function nextPage(){
-
-        if(isset($this->response['next_page_token'])){
-            $this->api_parameters['pagetoken'] = $this->response['next_page_token'];
-            sleep(2);
-            return $this->get();
-        }
-        
-        return false;
-        
-    }
     
 }

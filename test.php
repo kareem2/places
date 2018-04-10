@@ -33,9 +33,15 @@ var_dump($zomato_place->get(['query' => [
 
 $google_results = $google->get(['query' => ["location" => '-33.8670522,151.1957362', 'radius' => 500, 'type' => 'restaurant']]);
 
+nextPage($google);
+
+function nextPage(\Places\Paginateable $endpoint){
+	var_dump($endpoint->nextPage());
+}
+
 
 //var_dump($google_results);
-var_dump($google->nextPage());
+//var_dump($google->nextPage());
 
 die();
 

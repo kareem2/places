@@ -131,8 +131,4 @@ class ApiEndpoint
         return $this->api_service_end_point;
     }
 
-    public function nextPage(){
-        return ;
-    }
-	
 }
