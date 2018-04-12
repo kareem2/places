@@ -1,7 +1,7 @@
 <?php
 namespace Places\Google;
 
-use Places\Paginateable;
+use Places\Interfaces\Paginateable;
 
 /**
 * 

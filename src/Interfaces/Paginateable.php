@@ -1,5 +1,5 @@
 <?php
-namespace Places;
+namespace Places\Interfaces;
 
 interface Paginateable{
 

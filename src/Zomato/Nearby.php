@@ -1,7 +1,7 @@
 <?php
 namespace Places\Zomato;
 
-use Places\Paginateable;
+use Places\Interfaces\Paginateable;
 /**
 * 
 */

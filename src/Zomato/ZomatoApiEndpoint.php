@@ -47,7 +47,6 @@ class ZomatoApiEndpoint extends ApiEndpoint
             'user-key' => static::$api_key
         ];
 
-        //var_dump($this->client_options);
     }
 
     

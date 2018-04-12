@@ -73,7 +73,6 @@ class ApiEndpoint
 		}
 
 		if(isset($parames['api_parameters']) && !empty($parames['api_parameters'])){
-			//$this->api_parameters = $parames['api_parameters'];
             $this->buildApiQuery($parames['api_parameters']);
 		}
 
@@ -106,7 +105,7 @@ class ApiEndpoint
         }
     }
 
-    public function get($options = []){
+    public function get($options = [], $return_type = 'json'){
 
         $url = $this->buildRequestUrl();
 
@@ -121,7 +120,12 @@ class ApiEndpoint
 
         $response = $this->httpClient->get($url, $options);
 
-        $this->response = json_decode($response->getBody(), true);
+        if($return_type =='json'){
+            $this->response = json_decode($response->getBody(), true);
+        }else{
+            $this->response = $response->getBody()->getContents();
+        }
+        
 
         return $this->response;
     }
@@ -129,6 +133,10 @@ class ApiEndpoint
 
     public function get_end_point_url(){
         return $this->api_service_end_point;
+    }
+
+    public function get_response(){
+        return $this->response;
     }
 
 }
