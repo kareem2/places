@@ -411,6 +411,8 @@ r((string)$photo['effective_url']);*/
             // Image
             if(place_details['photos'] !== undefined){ 
               $("#cover-image").css("background-image", "url("+place_details['photos'][1].getUrl({maxHeight: 900})+")");
+            }else{
+              $("#cover-image").css("background-image", "url(default-image.jpg)");
             }
             
           }
