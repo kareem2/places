@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Atmos - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/3C0116E2-DB20-6743-9F18-8D8CF54AB5D3/main.js" charset="UTF-8"></script><script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+    <style type="text/css">
+      @font-face {
+        font-family: "Larsseit";
+        src: url('/assets/fonts/Larsseit.ttf') format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Larsseit";
+        src: url('/assets/fonts/Larsseit-Medium.ttf') format("truetype");
+        font-weight: 600;
+        font-style: normal;
+      }
+        @font-face {
+        font-family: "Larsseit";
+        src: url('/assets/fonts/Larsseit-Bold.ttf') format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+      .customfont {
+          font-family: "Larsseit", Verdana, Tahoma, sans-serif;;
+      }
+
+      .section {
+        background: rgba(67, 69, 93, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+  <div class="container has-text-centered">
+    <a class="navbar-item" href="/">
+      <div style="font-weight: 600; color: black; font-size: 13px; letter-spacing: 2px;">ATMOS</div>
+    </a>
+  </div>
+
+  <section class="section" style="padding-bottom: 2em; padding-top: 1.5em; background: white;">
+    <div class="container">
+      <div class="columns" style="align-items: center;">
+        <div class="column is-4 has-text-centered-mobile">
+          <div class="is-size-6">
+            ⏱ Open right now at <span id="datetime" style="font-weight: 600; color: #232527;"></span>
+          </div>
+        </div>
+        <div class="column is-4 has-text-centered">
+          <div class="is-size-6">
+            📍 You are at <span class="user-address">Bridge St, Sydney NSW 2000</span>
+          </div>
+          <a href="#" style="font-size: 13px; color: #FD696E;">
+            Change location
+          </a>
+          
+        </div>
+
+      </div>
+<div class="columns" style="align-items: center;">
+<div class="column is-12 has-text-centered">
+<input class="input" id="address-search-input" type="text" style="padding-right: 0px !important;" placeholder="Try &quot;Bridge St&quot;">  
+</div> 
+</div>  
+                      
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 2.5em;">
+    <div class="container">
+      <div class="has-text-centered">
+        <div class="button grey">
+          + ADD FILTERS
+        </div>
+      </div>
+
+      <div class="columns is-variable is-3 is-multiline place-grid" id="search-results">
+
+        <div class="column is-3">
+          <div class="place-card">
+            <a href="/palmer-co3.html">
+              <div class="featured-image" style="background-image:url('/assets/images/palmer-co.jpg');">
+                <div class="closing-time is-size-6-mobile">
+                  <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+                </div>
+              </div>
+            </a>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name is-size-5-mobile">
+                Palmer & Co
+              </div>
+              <div class="walking-distance is-size-6-mobile">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/untied.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                Untied
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/pontoon.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                Pontoon
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/light-brigade.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                The Light Brigade
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/ivy-pool-bar.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                Ivy Pool Bar
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/nola.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                Nola Smokehouse
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/the-rook.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                The Rook
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+            </div>
+            <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+              <a href="#" style="color: #FD696E;">
+                Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/watsons-bay.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                Watson's Bay Boutique Hotel
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/chinese-laundry.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                Chinese Laundry
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/opera-bar.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                Opera Bar
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/80-proof.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                80 Proof
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-3">
+          <div class="place-card">
+            <div class="featured-image" style="background-image:url('/assets/images/scary-canary.jpg');">
+              <div class="closing-time is-size-6-mobile">
+                <span style="width: 7px; height: 7px; background: #60dc83; border-radius: 60px; display: inline-block; margin-right: 7px; margin-bottom: 1px;"></span>Open for 3 hours
+              </div>
+            </div>
+            <div style="padding-left: 20px; padding-right: 20px;">
+              <div class="name">
+                Scary Canary
+              </div>
+              <div class="walking-distance">
+                3 min walk
+              </div>
+              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">
+                <a href="#" style="color: #FD696E;">
+                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section pad-vert-small">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <h1 class="title is-size-5-desktop is-size-4-mobile">
+            Search for a place
+          </h1>
+          <div class="field">
+            <div class="control">
+              <input class="input homepage" type="text" placeholder="Search now">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-10 is-offset-1">
+          <p class="title is-6">
+            Just show me...
+          </p>
+          <div class="columns is-multiline is-variable is-3 categories">
+            <div class="column is-3">
+              <div class="category-bg" style="background-image:url('/assets/images/category/pub.jpg');">
+                <div class="category-names">
+                  Pubs
+                </div>
+              </div>
+            </div>
+            <div class="column is-3">
+              <div class="category-bg" style="background-image:url('/assets/images/pocket-bar.jpg');">
+                <div class="category-names">
+                  Bars
+                </div>
+              </div>
+            </div>
+            <div class="column is-3">
+              <div class="category-bg" style="background-image:url('/assets/images/category/club.jpg');">
+                <div class="category-names">
+                  Clubs
+                </div>
+              </div>
+            </div>
+            <div class="column is-3">
+              <div class="category-bg" style="background-image:url('/assets/images/category/food.jpg');">
+                <div class="category-names">
+                  Food
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pad-vert-small footer">
+    <div class="container">
+      <div class="columns is-mobile">
+        <div class="column is-6-desktop is-5-desktop">
+          Atmos 2018.
+        </div>
+        <div class="column is-6-desktop is-7-mobile has-text-right">
+          Created by George Hatzis.
+        </div>
+      </div>
+    </div>
+  </section>
+  </body>
+  <script>
+    var dt = new Date();
+    document.getElementById("datetime").innerHTML = dt.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+  </script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-jw7Knx7PKSvTPt67VramDlQfidlcvS0&libraries=places"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript" src="assets/app.js"></script>
+
+</html>
