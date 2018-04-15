@@ -235,10 +235,10 @@ function address_search_callback(results, status) {
     }
 
     if(results.length == 0){
-      $("#search-results").html('There is opend places on this location right now!');
+      $("#search-results").html('There is no opend places on this location right now!');
     }
   }else{
-    $("#search-results").html('There is opend places on this location right now!');
+    $("#search-results").html('There is no opend places on this location right now!');
   }
 }
 
