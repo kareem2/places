@@ -232,8 +232,13 @@ function address_search_callback(results, status) {
         </div>';
 
       $("#search-results").append(place_block);
-
     }
+
+    if(results.length == 0){
+      $("#search-results").html('There is opend places on this location right now!');
+    }
+  }else{
+    $("#search-results").html('There is opend places on this location right now!');
   }
 }
 
