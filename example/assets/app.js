@@ -22,7 +22,7 @@ function amTime(date) {
 
 var input = document.getElementById('search-input');
 var address_input = document.getElementById('address-search-input');
-var service;
+//var service;
 var address_autocomplete;
 var place_type = 'restaurant';
 
@@ -37,27 +37,119 @@ var options = {
 
 
 if(input !== undefined && input !== null){
-  add_input_autocomplete();
+  add_input_autocomplete(input, {bounds: defaultBounds, strictBounds: true, types: ["establishment"] });
 }
 
 if(address_input !== undefined && address_input !== null){
-
   add_address_input_autocomplete(address_input, options);
 }
 
 
 
+function add_input_autocomplete(input, options){
+
+  service = new google.maps.places.PlacesService(input);
+
+  autocomplete = new google.maps.places.Autocomplete(input, options);
+
+  autocomplete.addListener('place_changed', function() {
+    var place = autocomplete.getPlace();
+    console.log(place['place_id']);
+
+    place_details = place;
+        console.log(place_details);
+
+        var today;
+
+        try{
+          today = new Date();
+          today.setMinutes(today.getMinutes() + today.getTimezoneOffset())
+          today.setMinutes(today.getMinutes() + place_details['utc_offset']);
+          current_date = today;
+        }catch(err){
+          console.log(err);
+          today = new Date();
+        }
+        
+        today = today.getDay();
+        today = weekday[today];
+
+
+        // Address
+        $("#address").html(place_details['formatted_address']);
+
+        // Phone
+        $("#phone").html(place_details['formatted_phone_number']);
+
+        // Name
+        $('.place-name').html(place_details['name']);
+        
+        // Rating
+        $('#google-rating').html(place_details['rating']);
+
+
+        // Website
+        if(place_details['website'] !== undefined){
+          $("#place-website").attr('href', place_details['website']);
+        }
+        // Open status
+        var open = false;
+        if(place_details['opening_hours'] !== undefined){
+          if(place_details['opening_hours']['open_now'] == true){
+            open = true;
+          }
+        }
+        if(open){
+          $(".open-status").removeClass('closed').addClass('open').html('OPEN NOW');
+        }else{
+          $(".open-status").removeClass('open').addClass('closed').html('CLOSED NOW');
+        }
+
+
+        // Opening hours
+        var open_times = [];
+        if(place_details['opening_hours'] !== undefined){
+          if(place_details['opening_hours']['periods'] !== undefined){
+            place_details['opening_hours']['weekday_text'].forEach(function(period){
+              //console.log(period.split(': '));
+              open_times.push(period.split(': '));
+            })                  
+          }
+          console.log(open_times);
+        }              
+
+        $("#week-days").html('');
+        $("#open-time").html('');
+
+        open_times.forEach(function(open_time){
+          style = '';
+          console.log([today.toLowerCase() , open_time[0].toLowerCase()]);
+          if(today.toLowerCase() == open_time[0].toLowerCase()){
+            style= 'style="font-weight: 600; opacity: 1;"';
+          }
+          $("#week-days").append('<div class="time day" '+style+'>'+open_time[0]+'</div>');
+          $("#open-time").append('<div class="time"'+style+'>'+open_time[1]+'</div>');
+
+        });
+
+        // Image
+        if(place_details['photos'] !== undefined){ 
+          $("#cover-image").css("background-image", "url("+place_details['photos'][0].getUrl({maxHeight: 900})+")");
+        }else{
+          $("#cover-image").css("background-image", "url(default-image.jpg)");
+        }        
+  });  
+}
 
 
 
 
 
 function add_address_input_autocomplete(input, options){
-  console.log(3);
+
   service = new google.maps.places.PlacesService(input);
 
   address_autocomplete = new google.maps.places.Autocomplete(address_input, options);
-
 
   address_autocomplete.addListener('place_changed', function() {
       var place = address_autocomplete.getPlace();
@@ -66,8 +158,9 @@ function add_address_input_autocomplete(input, options){
 
       var request = {
         location: place['geometry'].location,
-        radius: '500',
-        type: [place_type]
+        radius: '1000',
+        type: [place_type],
+        openNow: true
       };    
 
       console.log(request);
@@ -82,7 +175,7 @@ function nearbySearch(service, request, callback){
 }
 
 function address_search_callback(results, status) {
-  console.log(results.length);
+  console.log(results);
   if (status == google.maps.places.PlacesServiceStatus.OK) {
     $("#search-results").html('');
     for (var i = 0; i < results.length; i++) {
@@ -107,7 +200,7 @@ function address_search_callback(results, status) {
 
       open_span = '';
       if(open){
-        open_span = '<span class="open-status open">OPEN NOW</span> <span style="opacity:0.7" class="close-time">Closes in 2 hours</span>';
+        open_span = '<span class="open-status open">OPEN NOW</span> <span style="opacity:0.7" class="close-time"></span>';
       }else{
          open_span = '<span class="open-status closed">CLOSED NOW</span>';
       }
@@ -145,11 +238,17 @@ function address_search_callback(results, status) {
 }
 
 
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
 
-
-
-
-
+function showPosition(position) {
+  console.log(position);
+}
 
 
 /*

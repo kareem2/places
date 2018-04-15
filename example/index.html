@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
     <link rel="stylesheet" type="text/css" href="style.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
-	<script type="text/javascript" src="assets/ref.js"></script>
-	<link rel="stylesheet" type="text/css" href="assets/ref.css">    
-    <head>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  	<link rel="stylesheet" type="text/css" href="assets/ref.css">    
     <style>
       body, button, input, select, textarea {
         font-family: 'Larsseit', sans-serif;
@@ -230,138 +227,8 @@
     </div>
   </section>
   </body>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-jw7Knx7PKSvTPt67VramDlQfidlcvS0&libraries=places">
-    </script>
-
-    <script type="text/javascript">
-
-      var weekday = new Array(7);
-      weekday[0] = "Sunday";
-      weekday[1] = "Monday";
-      weekday[2] = "Tuesday";
-      weekday[3] = "Wednesday";
-      weekday[4] = "Thursday";
-      weekday[5] = "Friday";
-      weekday[6] = "Saturday";
-
-      var current_date;
-
-
-
-      function amTime(date) {
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        var ampm = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // the hour '0' should be '12'
-        minutes = minutes < 10 ? '0'+minutes : minutes;
-        var strTime = hours + ':' + minutes + ' ' + ampm;
-        return strTime;
-      }
-
-
-      var input = document.getElementById('search-input');
-      var defaultBounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(-39.72465582215755, 113.08936737466638),
-        new google.maps.LatLng(-10.8556105884471, 154.39796112466638));
-
-      var options = {
-        bounds: defaultBounds,
-        strictBounds: true,
-        //componentRestrictions: {'country': ['il']},
-        types: ["establishment"]
-      }
-      var autocomplete = new google.maps.places.Autocomplete(input, options); 
-      var service = new google.maps.places.PlacesService(input);
-
-
-      autocomplete.addListener('place_changed', function() {
-        var place = autocomplete.getPlace();
-        console.log(place['place_id']);
-
-        place_details = place;
-            console.log(place_details);
-
-            var today;
-
-            try{
-              today = new Date();
-              today.setMinutes(today.getMinutes() + today.getTimezoneOffset())
-              today.setMinutes(today.getMinutes() + place_details['utc_offset']);
-              current_date = today;
-            }catch(err){
-              console.log(err);
-              today = new Date();
-            }
-            
-            today = today.getDay();
-            today = weekday[today];
-
-
-            // Address
-            $("#address").html(place_details['formatted_address']);
-
-            // Phone
-            $("#phone").html(place_details['formatted_phone_number']);
-
-            // Name
-            $('.place-name').html(place_details['name']);
-            
-            // Rating
-            $('#google-rating').html(place_details['rating']);
-
-
-            // Website
-            if(place_details['website'] !== undefined){
-              $("#place-website").attr('href', place_details['website']);
-            }
-            // Open status
-            var open = false;
-            if(place_details['opening_hours'] !== undefined){
-              if(place_details['opening_hours']['open_now'] == true){
-                open = true;
-              }
-            }
-            if(open){
-              $(".open-status").removeClass('closed').addClass('open').html('OPEN NOW');
-            }else{
-              $(".open-status").removeClass('open').addClass('closed').html('CLOSED NOW');
-            }
-
-
-            // Opening hours
-            var open_times = [];
-            if(place_details['opening_hours'] !== undefined){
-              if(place_details['opening_hours']['periods'] !== undefined){
-                place_details['opening_hours']['weekday_text'].forEach(function(period){
-                  //console.log(period.split(': '));
-                  open_times.push(period.split(': '));
-                })                  
-              }
-              console.log(open_times);
-            }              
-
-            $("#week-days").html('');
-            $("#open-time").html('');
-
-            open_times.forEach(function(open_time){
-              style = '';
-              console.log([today.toLowerCase() , open_time[0].toLowerCase()]);
-              if(today.toLowerCase() == open_time[0].toLowerCase()){
-                style= 'style="font-weight: 600; opacity: 1;"';
-              }
-              $("#week-days").append('<div class="time day" '+style+'>'+open_time[0]+'</div>');
-              $("#open-time").append('<div class="time"'+style+'>'+open_time[1]+'</div>');
-
-            });
-
-            // Image
-            if(place_details['photos'] !== undefined){ 
-              $("#cover-image").css("background-image", "url("+place_details['photos'][0].getUrl({maxHeight: 900})+")");
-            }else{
-              $("#cover-image").css("background-image", "url(default-image.jpg)");
-            }        
-      });
-
-    </script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-jw7Knx7PKSvTPt67VramDlQfidlcvS0&libraries=places,geometry">
+  </script>
+  <script type="text/javascript" src="assets/app.js"></script>
 </html>
