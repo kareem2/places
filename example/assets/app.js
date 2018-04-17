@@ -54,6 +54,8 @@ function add_input_autocomplete(input, options){
 
   autocomplete.addListener('place_changed', function() {
     var place = autocomplete.getPlace();
+
+    $(".close-time").html('');
     console.log(place['place_id']);
 
     place_details = place;
@@ -123,7 +125,7 @@ function add_input_autocomplete(input, options){
 
         open_times.forEach(function(open_time){
           style = '';
-          console.log([today.toLowerCase() , open_time[0].toLowerCase()]);
+
           if(today.toLowerCase() == open_time[0].toLowerCase()){
             style= 'style="font-weight: 600; opacity: 1;"';
           }
@@ -131,6 +133,9 @@ function add_input_autocomplete(input, options){
           $("#open-time").append('<div class="time"'+style+'>'+open_time[1]+'</div>');
 
         });
+
+        // Close time
+        $(".close-time").html(closeTime(place_details));
 
         // Image
         if(place_details['photos'] !== undefined){ 
@@ -256,6 +261,48 @@ function showPosition(position) {
 }
 
 
+function timeLeft(diff) {
+
+    var hours   = Math.floor(diff / 3.6e6);
+    var minutes = Math.floor((diff % 3.6e6) / 6e4);
+    var seconds = Math.floor((diff % 6e4) / 1000);
+
+    var out = '';
+
+    if(hours > 0){
+      out = out + hours + ' hours';
+      if(minutes > 0){
+        out = out + ' and ' + minutes + ' minutes.';
+      }
+    }else if(minutes > 0){
+    out = out + minutes + ' minutes.';
+  }
+
+  return out;    
+}
+
+
+function closeTime(place_details){
+  try{
+    for(var x = 0; x < place_details['opening_hours']['periods'].length; x++){
+
+      period = place_details['opening_hours']['periods'][x];
+      open_day = period.open.day;
+      close_day = period.close.day;
+      if(current_date.getDay() >= open_day && current_date.getDay() <= close_day){
+        close_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + (close_day - open_day), period.close.hours, period.close.minutes);
+
+        diff = close_date - current_date;
+
+        return 'Close in ' + timeLeft(diff)
+        break;
+      } 
+    }     
+  }catch(err){
+    return '';
+  }
+ 
+}
 /*
 var autocomplete = new google.maps.places.Autocomplete(input, options);
 var service = new google.maps.places.PlacesService(input);
