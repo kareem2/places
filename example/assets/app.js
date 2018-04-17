@@ -37,7 +37,12 @@ var options = {
 
 
 if(input !== undefined && input !== null){
-  add_input_autocomplete(input, {bounds: defaultBounds, strictBounds: true, types: ["establishment"] });
+  options = {
+    bounds: defaultBounds, 
+    strictBounds: true, 
+    types: ["establishment"] 
+  };
+  add_input_autocomplete(input, options);
 }
 
 if(address_input !== undefined && address_input !== null){
@@ -79,6 +84,9 @@ function add_input_autocomplete(input, options){
 
         // Address
         $("#address").html(place_details['formatted_address']);
+
+        // Directions
+        $("#directions-link").attr('href', 'https://www.google.com/maps/dir/?api=1&destination='+place_details['formatted_address']);
 
         // Phone
         $("#phone").html(place_details['formatted_phone_number']);
