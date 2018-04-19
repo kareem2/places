@@ -111,7 +111,7 @@ function populate_place(place_details){
     $("#address").html(place_details['formatted_address']);
 
     // Directions
-    $("#directions-link").attr('href', 'https://www.google.com/maps/dir/?api=1&destination='+place_details['formatted_address']);
+    $("#directions-link").attr('href', getDirectionsLink(place_details['geometry']['location'].lat() + ',' + place_details['geometry']['location'].lng()));
 
     // Phone
     $("#phone").html(place_details['formatted_phone_number']);
@@ -258,7 +258,7 @@ function address_search_callback(results, status) {
                 .....\
               </div>\
               <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">\
-                <a href="#" style="color: #FD696E;">\
+                <a target="_blank" href="'+getDirectionsLink(place_details['geometry']['location'].lat() + ',' + place_details['geometry']['location'].lng())+'" style="color: #FD696E;">\
                   Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>\
                 </a>\
               </div>\
@@ -347,7 +347,9 @@ function getQuery(){
   return output;
 }
 
-
+function getDirectionsLink(address){
+  return 'https://www.google.com/maps/dir/?api=1&destination='+address;
+}
 
 
 
