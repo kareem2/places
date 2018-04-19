@@ -319,16 +319,21 @@ function closeTime(place_details){
       period = place_details['opening_hours']['periods'][x];
       open_day = period.open.day;
       close_day = period.close.day;
-      if(current_date.getDay() >= open_day && current_date.getDay() <= close_day){
+
+      if(current_date.getDay() >= open_day && current_date.getDay() <= close_day && current_date.getHours() >= period.open.hours && current_date.getHours() <= period.close.hours){
+
         close_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + (close_day - open_day), period.close.hours, period.close.minutes);
 
-        diff = close_date - current_date;
+        console.log([open_day, close_day, current_date, close_date ]);
 
+        diff = close_date - current_date;
+        console.log(diff);
         return 'Close in ' + timeLeft(diff)
         break;
       } 
     }     
   }catch(err){
+    console.log(err);
     return '';
   }
 }
