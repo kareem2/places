@@ -243,7 +243,7 @@ function address_search_callback(results, status) {
 
       place_block = '<div class="column is-3">\
           <div class="place-card">\
-            <a href="/palmer-co3.html">\
+            <a target="_blank" href="place_details.html?place_id='+place_details['place_id']+'">\
               <div class="featured-image" style="background-image:url('+photo+');">\
                 <div class="closing-time is-size-6-mobile">\
                   '+open_span+'\
