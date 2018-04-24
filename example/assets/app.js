@@ -55,17 +55,23 @@ if(address_input !== undefined && address_input !== null){
 
 
 if(searchQuery['place_id'] !== undefined){
+
+  get_palce_details(searchQuery['place_id'], populate_place);
+
+}
+
+function get_palce_details(place_id, callback){
   input = document.createElement('input');
   service = new google.maps.places.PlacesService(input);
 
 
     service.getDetails({
-        placeId:searchQuery['place_id']
+        placeId: place_id
     }, function(place_details, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          populate_place(place_details);
+          callback(place_details);
         }else{
-          alert('err');
+          //alert('err');
         }
     });
 
@@ -81,7 +87,7 @@ function add_input_autocomplete(input, options){
     var place = autocomplete.getPlace();
 
     $(".close-time").html('');
-    console.log(place['place_id']);
+    //console.log(place['place_id']);
     place_details = place;
     populate_place(place_details);       
   });  
@@ -89,7 +95,7 @@ function add_input_autocomplete(input, options){
 
 function populate_place(place_details){
     
-    console.log(place_details);
+    //console.log(place_details);
 
     var today;
 
@@ -198,7 +204,7 @@ function add_address_input_autocomplete(input, options){
         openNow: true
       };    
 
-      console.log(request);
+      //console.log(request);
 
       service = new google.maps.places.PlacesService(input);
       nearbySearch(service, request, address_search_callback);
@@ -210,64 +216,75 @@ function nearbySearch(service, request, callback){
 }
 
 function address_search_callback(results, status) {
-  console.log(results);
+  //console.log(results);
   if (status == google.maps.places.PlacesServiceStatus.OK) {
     $("#search-results").html('');
-    for (var i = 0; i < results.length; i++) {
-
+    //for (var i = 0; i < results.length; i++) {
+    $.each(results, function(i, place_details
+      ){
       place_details = results[i];
-      var photo = 'default-image.jpg';
+      //console.log(place_details);
+      get_palce_details(place_details['place_id'], function(details){
+        //console.log(place_details);
+        //console.log(details);
+        var photo = 'default-image.jpg';
 
-      if (place_details['photos'] !== undefined) {
-          photo = place_details['photos'][0].getUrl({
-              maxHeight: 900
-          });
-      }
-
-
-      // Open status
-      var open = false;
-      if(place_details['opening_hours'] !== undefined){
-        if(place_details['opening_hours']['open_now'] == true){
-          open = true;
+        if (place_details['photos'] !== undefined) {
+            photo = place_details['photos'][0].getUrl({
+                maxHeight: 900
+            });
         }
-      }
-
-      open_span = '';
-      if(open){
-        open_span = '<span class="open-status open">OPEN NOW</span> <span style="opacity:0.7" class="close-time"></span>';
-      }else{
-         open_span = '<span class="open-status closed">CLOSED NOW</span>';
-      }
 
 
-      place_block = '<div class="column is-3">\
-          <div class="place-card">\
-            <a target="_blank" href="place_details.html?place_id='+place_details['place_id']+'">\
-              <div class="featured-image" style="background-image:url('+photo+');">\
-                <div class="closing-time is-size-6-mobile">\
-                  '+open_span+'\
+        // Open status
+        var open = false;
+        if(place_details['opening_hours'] !== undefined){
+          if(place_details['opening_hours']['open_now'] == true){
+            open = true;
+          }
+        }
+
+        open_span = '';
+        if(open){
+          open_span = '<span class="open-status open">OPEN NOW</span> <span style="opacity:0.7" class="close-time"></span>';
+        }else{
+           open_span = '<span class="open-status closed">CLOSED NOW</span>';
+        }
+
+
+
+        place_block = '<div class="column is-3">\
+            <div class="place-card">\
+              <a target="_blank" href="place_details.html?place_id='+place_details['place_id']+'">\
+                <div class="featured-image" style="background-image:url('+photo+');">\
+                  <div class="closing-time is-size-6-mobile">\
+                    '+open_span+'\
+                  </div>\
+                </div>\
+              </a>\
+              <div style="padding-left: 20px; padding-right: 20px;">\
+                <div class="name is-size-5-mobile">\
+                  '+place_details['name']+'\
+                </div>\
+                <div class="close-time">'+closeTime(details)+'</div>\
+                <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">\
+                  <a target="_blank" href="'+getDirectionsLink(place_details['geometry']['location'].lat() + ',' + place_details['geometry']['location'].lng())+'" style="color: #FD696E;">\
+                    Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>\
+                  </a>\
                 </div>\
               </div>\
-            </a>\
-            <div style="padding-left: 20px; padding-right: 20px;">\
-              <div class="name is-size-5-mobile">\
-                '+place_details['name']+'\
-              </div>\
-              <div class="walking-distance is-size-6-mobile">\
-                .....\
-              </div>\
-              <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">\
-                <a target="_blank" href="'+getDirectionsLink(place_details['geometry']['location'].lat() + ',' + place_details['geometry']['location'].lng())+'" style="color: #FD696E;">\
-                  Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>\
-                </a>\
-              </div>\
             </div>\
-          </div>\
-        </div>';
+          </div>';
 
-      $("#search-results").append(place_block);
-    }
+        $("#search-results").append(place_block);       
+      });
+
+    })
+
+
+
+
+    //}
 
     if(results.length == 0){
       $("#search-results").html('There is no opened places on this location right now!');
@@ -314,22 +331,49 @@ function timeLeft(diff) {
 
 function closeTime(place_details){
   try{
+    console.log(place_details);
     for(var x = 0; x < place_details['opening_hours']['periods'].length; x++){
 
+      today = new Date();
+      today.setMinutes(today.getMinutes() + today.getTimezoneOffset())
+      today.setMinutes(today.getMinutes() + place_details['utc_offset']);
+      current_date = today;
+
+
       period = place_details['opening_hours']['periods'][x];
+      
       open_day = period.open.day;
       close_day = period.close.day;
 
-      if(current_date.getDay() >= open_day && current_date.getDay() <= close_day && current_date.getHours() >= period.open.hours && current_date.getHours() <= period.close.hours){
+      open_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() - (current_date.getDay() - open_day), period.open.hours, period.open.minutes);
 
-        close_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + (close_day - open_day), period.close.hours, period.close.minutes);
+      close_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + (close_day - open_day), period.close.hours, period.close.minutes);
 
-        console.log([open_day, close_day, current_date, close_date ]);
+      console.log([open_day, close_day, current_date.getDay(), current_date.getDate(), current_date.getDate() - (current_date.getDay() - open_day)]);
 
-        diff = close_date - current_date;
-        console.log(diff);
-        return 'Close in ' + timeLeft(diff)
-        break;
+      console.log({'1utc_offset': place_details['utc_offset'], '2current_date': current_date, '3open_date': open_date, '4close_date': close_date, '5current_date.getDay': current_date.getDay(), '6open_day': open_day, '7close_day': close_day, '8period': period, '9current_date.getHours()': current_date.getHours()});
+
+
+      if(current_date.getDay() >= open_day && current_date.getDay() <= close_day 
+        /*&& current_date.getHours() >= period.open.hours && current_date.getHours() <= period.close.hours*/){
+
+        open_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() - (current_date.getDay() - open_day), period.open.hours, period.open.minutes);
+
+        close_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + (close_day - open_day), period.close.hours, period.close.minutes); 
+
+      if(current_date.getTime() >= open_date.getTime() && current_date.getTime() <= close_date.getTime()){
+      //if(current_date.getDay() >= open_day && current_date.getDay() <= close_day
+        //&& current_date.getHours() >= period.open.hours && current_date.getHours() <= period.close.hours){
+        //if(current_date.getTime() >= open_date.getTime() && current_date.getTime() <= close_date.getTime()){
+          //close_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + (close_day - open_day), period.close.hours, period.close.minutes);         
+
+          console.log({'current_date': current_date, 'open_date': open_date, 'close_date': close_date, 'period': period});
+
+          diff = close_date - current_date;
+          console.log(diff);
+          return 'Close in ' + timeLeft(Math.abs(diff))
+          break;
+        }
       } 
     }     
   }catch(err){
