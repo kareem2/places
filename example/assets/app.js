@@ -26,7 +26,7 @@ var input = document.getElementById('search-input');
 var address_input = document.getElementById('address-search-input');
 var service;
 var address_autocomplete;
-var place_type = 'restaurant';
+var place_type = 'food';
 
 
 var defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(-39.72465582215755, 113.08936737466638), new google.maps.LatLng(-10.8556105884471, 154.39796112466638));
@@ -219,7 +219,7 @@ function address_search_callback(results, status) {
   //console.log(results);
   if (status == google.maps.places.PlacesServiceStatus.OK) {
     $("#search-results").html('');
-    //for (var i = 0; i < results.length; i++) {
+
     $.each(results, function(i, place_details
       ){
       place_details = results[i];
@@ -278,8 +278,7 @@ function address_search_callback(results, status) {
 
         $("#search-results").append(place_block);       
       });
-
-    })
+    });
 
 
 
