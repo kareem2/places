@@ -358,7 +358,7 @@ function closeTime(place_details){
 
         open_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() - (current_date.getDay() - open_day), period.open.hours, period.open.minutes);
 
-        close_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + (close_day - open_day), period.close.hours, period.close.minutes); 
+        close_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + (close_day - current_date.getDay()), period.close.hours, period.close.minutes); 
 
       if(current_date.getTime() >= open_date.getTime() && current_date.getTime() <= close_date.getTime()){
       //if(current_date.getDay() >= open_day && current_date.getDay() <= close_day
