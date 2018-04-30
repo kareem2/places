@@ -23,7 +23,26 @@ var input = document.getElementById('search-input');
 var address_input = document.getElementById('address-search-input');
 var service;
 var address_autocomplete;
-var place_type = 'food';
+//var place_type = ['restaurant', 'night_club', 'bar'];
+
+var place_type = {
+  'restaurant': {
+    'title': 'Restaurants',
+    'id_selector': 'restaurant_div',
+    'name': 'restaurant'
+  },
+  'night_club': {
+    'title': 'Clubs',
+    'id_selector': 'night_club_div',
+    'name': 'night_club'
+  },
+  'bar': {
+    'title': 'Bars',
+    'id_selector': 'bar_div',
+    'name': 'bar'
+  }  
+};
+
 var defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(-39.72465582215755, 113.08936737466638), new google.maps.LatLng(-10.8556105884471, 154.39796112466638));
 var options = {
     bounds: defaultBounds,
@@ -191,33 +210,49 @@ function add_address_input_autocomplete(input, options) {
     address_autocomplete = new google.maps.places.Autocomplete(address_input, options);
     address_autocomplete.addListener('place_changed', function() {
         var place = address_autocomplete.getPlace();
+
         $('.user-address').html(place['formatted_address']);
-        var request = {
-            location: place['geometry'].location,
-            radius: '1000',
-            type: [place_type],
-            openNow: true
-        };
-        //console.log(request);
-        service = new google.maps.places.PlacesService(input);
-        nearbySearch(service, request, address_search_callback);
+
+        $("#search-results").html('');
+        
+        for(var type in place_type){
+          $("#search-results").append('<div class="column is-12 columns is-variable is-multiline place-grid" id="'+place_type[type]['id_selector']+'">\
+              <h1 class="title is-size-5-desktop is-size-4-mobile column is-12">'+place_type[type]['title']+'</h1>\
+            </div>');
+        }
+
+        for(var type in place_type){
+        //place_type.forEach(function(type){
+          var request = {
+              location: place['geometry'].location,
+              radius: '1000',
+              type: [type],
+              openNow: true
+          };
+          
+          nearbySearch(service, request, address_search_callback, place_type[type]);
+        }
+        //);
+
+
     });
 }
 
-function nearbySearch(service, request, callback) {
-    service.nearbySearch(request, callback);
+function nearbySearch(service, request, callback, type) {
+    service.nearbySearch(request, function(results, status){
+      callback(results, status, type);
+    });
 }
 
-function address_search_callback(results, status) {
-    //console.log(results);
+function address_search_callback(results, status, type) {
+    console.log(type + ' results:');
     if (status == google.maps.places.PlacesServiceStatus.OK) {
-        $("#search-results").html('');
+        
         $.each(results, function(i, place_details) {
             place_details = results[i];
-            //console.log(place_details);
+
             get_palce_details(place_details['place_id'], function(details) {
-                //console.log(place_details);
-                //console.log(details);
+
                 var photo = 'default-image.jpg';
                 if (place_details['photos'] !== undefined) {
                     photo = place_details['photos'][0].getUrl({
@@ -238,36 +273,37 @@ function address_search_callback(results, status) {
                     open_span = '<span class="open-status closed">CLOSED NOW</span>';
                 }
                 place_block = '<div class="column is-3">\
-            <div class="place-card">\
-              <a target="_blank" href="place_details.html?place_id=' + place_details['place_id'] + '">\
-                <div class="featured-image" style="background-image:url(' + photo + ');">\
-                  <div class="closing-time is-size-6-mobile">\
-                    ' + open_span + '\
+                  <div class="place-card">\
+                    <a target="_blank" href="place_details.html?place_id=' + place_details['place_id'] + '">\
+                      <div class="featured-image" style="background-image:url(' + photo + ');">\
+                        <div class="closing-time is-size-6-mobile">\
+                          ' + open_span + '\
+                        </div>\
+                      </div>\
+                    </a>\
+                    <div style="padding-left: 20px; padding-right: 20px;">\
+                      <div class="name is-size-5-mobile">\
+                        ' + place_details['name'] + '\
+                      </div>\
+                      <div class="close-time">' + closeTime(details) + '</div>\
+                      <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">\
+                        <a target="_blank" href="' + getDirectionsLink(place_details['geometry']['location'].lat() + ',' + place_details['geometry']['location'].lng()) + '" style="color: #FD696E;">\
+                          Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>\
+                        </a>\
+                      </div>\
+                    </div>\
                   </div>\
-                </div>\
-              </a>\
-              <div style="padding-left: 20px; padding-right: 20px;">\
-                <div class="name is-size-5-mobile">\
-                  ' + place_details['name'] + '\
-                </div>\
-                <div class="close-time">' + closeTime(details) + '</div>\
-                <div class="is-size-6-mobile" style="font-size: 13px; padding-top: 0; padding-bottom: 20px;">\
-                  <a target="_blank" href="' + getDirectionsLink(place_details['geometry']['location'].lat() + ',' + place_details['geometry']['location'].lng()) + '" style="color: #FD696E;">\
-                    Get directions <span style="position: relative; top: 2px; left: 3px;">→</span>\
-                  </a>\
-                </div>\
-              </div>\
-            </div>\
-          </div>';
-                $("#search-results").append(place_block);
+                </div>';
+
+                $("#"+type['id_selector']).append(place_block);
             });
         });
         //}
         if (results.length == 0) {
-            $("#search-results").html('There is no opened places on this location right now!');
+            //$("#search-results").html('There is no opened places on this location right now!');
         }
     } else {
-        $("#search-results").html('There is no opened places on this location right now!');
+        //$("#search-results").html('There is no opened places on this location right now!');
     }
 }
 
@@ -300,38 +336,52 @@ function timeLeft(diff) {
 }
 
 function closeTime(place_details) {
+    var will_close = false;
+    var close_time;
     try {
         console.log(place_details);
         for (var x = 0; x < place_details['opening_hours']['periods'].length; x++) {
+
             today = new Date();
             today.setMinutes(today.getMinutes() + today.getTimezoneOffset())
             today.setMinutes(today.getMinutes() + place_details['utc_offset']);
             current_date = today;
+
             period = place_details['opening_hours']['periods'][x];
             open_day = period.open.day;
             close_day = period.close.day;
-            if (current_date.getDay() >= open_day && current_date.getDay() <= close_day
-                /*&& current_date.getHours() >= period.open.hours && current_date.getHours() <= period.close.hours*/
-            ) {
+
+            if (current_date.getDay() >= open_day && current_date.getDay() <= close_day){
                 open_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() - (current_date.getDay() - open_day), period.open.hours, period.open.minutes);
+
                 close_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + (close_day - current_date.getDay()), period.close.hours, period.close.minutes);
+
                 if (current_date.getTime() >= open_date.getTime() && current_date.getTime() <= close_date.getTime()) {
+
+                    diff = close_date - current_date;
+
                     console.log({
                         'current_date': current_date,
                         'open_date': open_date,
                         'close_date': close_date,
                         'period': period
                     });
-                    diff = close_date - current_date;
-                    console.log(diff);
-                    return 'Close in ' + timeLeft(Math.abs(diff))
+                    
+                    close_time = diff;
+                    will_close = true;
+
                     break;
                 }
             }
         }
     } catch (err) {
         console.log(err);
-        return '';
+    }
+
+    if(will_close == true){
+      return 'Close in ' + timeLeft(close_time);
+    }else{
+      return 'Open 24 hours.';
     }
 }
 
@@ -377,88 +427,15 @@ function getZomatoDetails(q, lat, lng, callback) {
 function matchGoogleWithZomato(place_details, callback) {
     getZomatoDetails(place_details['name'], place_details['geometry']['location'].lat(), place_details['geometry']['location'].lng(), callback);
 }
+
+
 /*
-var autocomplete = new google.maps.places.Autocomplete(input, options);
-var service = new google.maps.places.PlacesService(input);
-autocomplete.addListener('place_changed', function() {
-    var place = autocomplete.getPlace();
-    console.log(place['place_id']);
-    service.getDetails({
-        placeId: place['place_id']
-    }, function(place_details, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-            console.log(place_details);
-            var today;
-            try {
-                today = new Date();
-                today.setMinutes(today.getMinutes() + today.getTimezoneOffset())
-                today.setMinutes(today.getMinutes() + place_details['utc_offset']);
-                current_date = today;
-            } catch (err) {
-                console.log(err);
-                today = new Date();
-            }
-            today = today.getDay();
-            today = weekday[today];
-            // Address
-            $("#address").html(place_details['formatted_address']);
-            // Phone
-            $("#phone").html(place_details['formatted_phone_number']);
-            // Name
-            $('.place-name').html(place_details['name']);
-            // Rating
-            $('#google-rating').html(place_details['rating']);
-            // Website
-            if (place_details['website'] !== undefined) {
-                $("#place-website").attr('href', place_details['website']);
-            }
-            // Open status
-            var open = false;
-            if (place_details['opening_hours'] !== undefined) {
-                if (place_details['opening_hours']['open_now'] == true) {
-                    open = true;
-                }
-            }
-            if (open) {
-                $(".open-status").removeClass('closed').addClass('open').html('OPEN NOW');
-            } else {
-                $(".open-status").removeClass('open').addClass('closed').html('CLOSED NOW');
-            }
-            // Opening hours
-            var open_times = [];
-            if (place_details['opening_hours'] !== undefined) {
-                if (place_details['opening_hours']['periods'] !== undefined) {
-                    place_details['opening_hours']['weekday_text'].forEach(function(period) {
-                        //console.log(period.split(': '));
-                        open_times.push(period.split(': '));
-                    })
-                }
-                console.log(open_times);
-            }
-            $("#week-days").html('');
-            $("#open-time").html('');
-            open_times.forEach(function(open_time) {
-                style = '';
-                console.log([today.toLowerCase(), open_time[0].toLowerCase()]);
-                if (today.toLowerCase() == open_time[0].toLowerCase()) {
-                    style = 'style="font-weight: 600; opacity: 1;"';
-                }
-                $("#week-days").append('<div class="time day" ' + style + '>' + open_time[0] + '</div>');
-                $("#open-time").append('<div class="time"' + style + '>' + open_time[1] + '</div>');
-            });
-            // Image
-            if (place_details['photos'] !== undefined) {
-                $("#cover-image").css("background-image", "url(" + place_details['photos'][1].getUrl({
-                    maxHeight: 900
-                }) + ")");
-            } else {
-                $("#cover-image").css("background-image", "url(default-image.jpg)");
-            }
-        }
-    });
-});
 
+                    console.log({
+                        'current_date': current_date,
+                        'open_date': open_date,
+                        'close_date': close_date,
+                        'period': period
+                    });
 
-function place_callback(){
-
-}*/
+*/
