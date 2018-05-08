@@ -23,6 +23,7 @@ var input = document.getElementById('search-input');
 var address_input = document.getElementById('address-search-input');
 var service;
 var address_autocomplete;
+
 //var place_type = ['restaurant', 'night_club', 'bar'];
 
 var place_type = {
@@ -92,7 +93,7 @@ function add_input_autocomplete(input, options) {
 }
 
 function populate_place(place_details) {
-    console.log(1);
+    //console.log(1);
     var today;
     try {
         today = new Date();
@@ -112,6 +113,29 @@ function populate_place(place_details) {
     $("#address").html(place_details['formatted_address']);
     // Directions
     $("#directions-link").attr('href', getDirectionsLink(place_details['geometry']['location'].lat() + ',' + place_details['geometry']['location'].lng()));
+    
+    // Distance time
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position){
+            
+            //console.log(position);
+            var from = new google.maps.LatLng(
+                place_details['geometry']['location'].lat(), 
+                place_details['geometry']['location'].lng());
+            var to =  new google.maps.LatLng(
+                position.coords.latitude, 
+                position.coords.longitude); 
+
+            var distance = google.maps.geometry.spherical.computeDistanceBetween(from, to);
+            
+            //console.log(timeLeft((distance * 1000) / 1.4));
+            $(".walk-time").html(timeLeft((distance * 1000) / 1.4) + ' walk.');
+
+            //console.log(google.maps.geometry.spherical.computeDistanceBetween(from, to));          
+            //console.log(google.maps.geometry.spherical.computeDistanceBetween(from, from));          
+        });
+    }
+
     // Phone
     $("#phone").html(place_details['formatted_phone_number']);
     // Name
@@ -143,7 +167,7 @@ function populate_place(place_details) {
                 open_times.push(period.split(': '));
             })
         }
-        console.log(open_times);
+        //console.log(open_times);
     }
     $("#week-days").html('');
     $("#open-time").html('');
@@ -170,7 +194,7 @@ function populate_place(place_details) {
         var zomato;
 
         if (results.restaurants !== undefined) {
-            console.log(results.restaurants);
+
             min_distance = 999999999999;
             //results.restaurants.forEach(function(restaurant) {
             for(i in results.restaurants){
@@ -188,13 +212,11 @@ function populate_place(place_details) {
 
                 distance = google.maps.geometry.spherical.computeDistanceBetween(google_location, zomato_location);
 
-                console.log(distance);
+
                 if(distance <= 100 && distance < min_distance){
                   min_distance = distance;
                   zomato = restaurant.restaurant;
 
-                  console.log('min founded');
-                  
                   //break;
                 }
 
@@ -245,7 +267,7 @@ function nearbySearch(service, request, callback, type) {
 }
 
 function address_search_callback(results, status, type) {
-    console.log(type + ' results:');
+    //console.log(type + ' results:');
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         
         $.each(results, function(i, place_details) {
@@ -327,19 +349,20 @@ function timeLeft(diff) {
     if (hours > 0) {
         out = out + hours + ' hours';
         if (minutes > 0) {
-            out = out + ' and ' + minutes + ' minutes.';
+            out = out + ' and ' + minutes + ' minutes';
         }
     } else if (minutes > 0) {
-        out = out + minutes + ' minutes.';
+        out = out + minutes + ' minutes';
     }
     return out;
+    //return out + ' and '+seconds+' seconds';
 }
 
 function closeTime(place_details) {
     var will_close = false;
     var close_time;
     try {
-        console.log(place_details);
+        //console.log(place_details);
         for (var x = 0; x < place_details['opening_hours']['periods'].length; x++) {
 
             today = new Date();
@@ -360,12 +383,12 @@ function closeTime(place_details) {
 
                     diff = close_date - current_date;
 
-                    console.log({
-                        'current_date': current_date,
-                        'open_date': open_date,
-                        'close_date': close_date,
-                        'period': period
-                    });
+                    // console.log({
+                    //     'current_date': current_date,
+                    //     'open_date': open_date,
+                    //     'close_date': close_date,
+                    //     'period': period
+                    // });
                     
                     close_time = diff;
                     will_close = true;
